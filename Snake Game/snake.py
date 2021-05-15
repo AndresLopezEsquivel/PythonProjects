@@ -10,9 +10,9 @@ LEFT = 180
 class Snake:
 
     def __init__(self):
-        self.snake = []
+        self.segments = []
         self.create_snake()
-        self.head = self.snake[0]
+        self.head = self.segments[0]
 
     def create_segment(self, position):
         new_segment = Turtle()
@@ -25,13 +25,13 @@ class Snake:
     def create_snake(self):
         x1 = 40.0
         for _ in range(3):
-            self.snake.append(self.create_segment((x1, 0)))
+            self.segments.append(self.create_segment((x1, 0)))
             x1 = x1 - DISTANCE
 
     def extend(self):
-        last_position = self.snake[-1].pos()
+        last_position = self.segments[-1].pos()
         new_segment = self.create_segment(last_position)
-        self.snake.append(new_segment)
+        self.segments.append(new_segment)
 
     def move_up(self):
         if self.head.heading() != DOWN:
@@ -50,8 +50,8 @@ class Snake:
             self.head.setheading(LEFT)
 
     def move(self):
-        for segment_index in range(len(self.snake) - 1, 0, -1):
-            x_pos = self.snake[segment_index - 1].xcor()
-            y_pos = self.snake[segment_index - 1].ycor()
-            self.snake[segment_index].goto(x_pos, y_pos)
-        self.snake[0].forward(DISTANCE)
+        for segment_index in range(len(self.segments) - 1, 0, -1):
+            x_pos = self.segments[segment_index - 1].xcor()
+            y_pos = self.segments[segment_index - 1].ycor()
+            self.segments[segment_index].goto(x_pos, y_pos)
+        self.segments[0].forward(DISTANCE)
