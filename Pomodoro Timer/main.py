@@ -1,18 +1,7 @@
 from tkinter import *
 from timer import Timer
 
-PINK = "#e2979c"
-RED = "#e7305b"
-GREEN = "#9bdeac"
 YELLOW = "#f7f5dd"
-FONT_NAME = "Courier"
-WORK_MIN = 25
-SHORT_BREAK_MIN = 5
-LONG_BREAK_MIN = 20
-TOMATO_IMAGE_PATH = "./tomato.png"
-FONT_CENTRAL_TEXT = (FONT_NAME, 35, "bold")
-FONT_TIMER_TEXT = (FONT_NAME, 50, "bold")
-FONT_CHECKMARK = (FONT_NAME, 20, "bold")
 
 window = Tk()
 window.title("Pomodoro Timer")
