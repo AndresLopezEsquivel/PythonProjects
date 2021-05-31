@@ -2,12 +2,11 @@ import os
 import requests
 from twilio.rest import Client
 
-TWILIO_PHONE_NUMBER = "+14028589591"
-RECIPIENT_PHONE_NUMBER = "+525527101838"
+TWILIO_PHONE_NUMBER = ""
+RECIPIENT_PHONE_NUMBER = ""
 TWILIO_ACCOUNT_SID = os.environ.get("TWILIO_ACCOUNT_SID")
 TWILIO_AUTH_TOKEN = os.environ.get("TWILIO_AUTH_TOKEN")
 WEATHER_API_APP_ID = os.environ.get("WEATHER_API_APP_ID")
-WeatherAPI_endpoint = "https://api.openweathermap.org/data/2.5/onecall"
 WeatherAPI_endpoint = "https://api.openweathermap.org/data/2.5/onecall"
 
 arguments = {
