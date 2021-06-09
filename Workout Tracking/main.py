@@ -1,69 +1,30 @@
-import datetime
-import os
 import requests
+import pprint
 
-GENDER = os.environ.get("GENDER")
-WEIGHT_KG = os.environ.get("WEIGHT_KG")
-HEIGHT_CM = os.environ.get("HEIGHT_CM")
-AGE = os.environ.get("AGE")
+cities = ["Paris",
+          "Berlin",
+          "Tokyo",
+          "Sydney",
+          "Istanbul",
+          "Kuala Lumpur",
+          "New York",
+          "San Francisco",
+          "Cape Town"]
 
-NUTRITIONIX_APP_ID = os.environ.get("NUTRITIONIX_APPLICATION_ID")
-NUTRITIONIX_APP_KEY = os.environ.get("NUTRITIONIX_APPLICATION_KEY")
+end_point = "https://tequila-api.kiwi.com/locations/query"
 
-EXERCISE_ENDPOINT = "https://trackapi.nutritionix.com/v2/natural/exercise"
-SHEETY_ENDPOINT = os.environ.get("SHEETY_ENDPOINT")
-SHEETY_TOKEN = os.environ.get("SHEETY_TOKEN")
+apikey = "sSv5JKTl8Ez18-1LfsSkorqWKWvdrP5P"
 
-headers = {
-    "Content-Type": "application/json",
-    "x-app-id": NUTRITIONIX_APP_ID,
-    "x-app-key": NUTRITIONIX_APP_KEY
-}
+headers = {"apiKey": apikey}
 
-query = input("What did you do today? \n")
+for city in cities:
 
-exercise_params = {
-    "query": query,
-    "gender": GENDER,
-    "weight_kg": WEIGHT_KG,
-    "height_cm": HEIGHT_CM,
-    "age": AGE
-}
+    body = {"term": city}
 
-response = requests.post(url=EXERCISE_ENDPOINT,
-                         json=exercise_params,
-                         headers=headers)
+    response = requests.get(url=end_point, params=body, headers=headers)
 
-exercises_response = response.json()["exercises"]
+    data = response.json()
 
-date = datetime.datetime.now()
+    # pprint.pprint(data)
 
-exercises_list = [{
-    "Date": date.strftime("%d/%m/%Y"),
-    "Time": date.strftime("%H:%M:%S"),
-    "Exercise": exercise["name"].title(),
-    "Duration": exercise["duration_min"],
-    "Calories": exercise["nf_calories"]
-                    } for exercise in exercises_response]
-
-sheety_headers = {"Authorization": SHEETY_TOKEN}
-
-for exercise in exercises_list:
-
-    workout_sheet_params = {
-        "workout": {
-            "date": exercise["Date"],
-            "time": exercise["Time"],
-            "exercise": exercise["Exercise"],
-            "duration": exercise["Duration"],
-            "calories": exercise["Calories"]
-        }
-    }
-
-    sheety_response = requests.post(
-        url=SHEETY_ENDPOINT,
-        json=workout_sheet_params,
-        headers=sheety_headers
-    )
-
-    print(sheety_response.text)
+    print(data["locations"][0]["code"])

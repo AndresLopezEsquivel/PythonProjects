@@ -17,15 +17,26 @@ class DataManager:
         self.destination_data = sheet_data
         return self.destination_data
 
+    def set_destination_data(self, destination_data):
+        self.destination_data = destination_data
+
     def update_sheet(self):
         for city in self.destination_data:
-            sheet_request_body = {
-                "price": {
-                    "iataCode": city["iataCode"]
-                }
-            }
-            put_request_endpoint = f"{SHEETY_ENDPOINT}/{city['id']}"
+            city_id = city["id"]
+            city_iata_code = city["iataCode"]
+            self.update_city_iata_code(city_id=city_id,
+                                       iata_code=city_iata_code)
 
-            sheet_response = requests.put(url=put_request_endpoint,
-                                          json=sheet_request_body,
-                                          headers=SHEETY_HEADERS)
+    def update_city_iata_code(self, city_id, iata_code):
+        request_body = {
+            "price": {
+                "iataCode": iata_code
+            }
+        }
+
+        request_endpoint = f"{SHEETY_ENDPOINT}/{city_id}"
+
+        response = requests.put(url=request_endpoint,
+                                json=request_body,
+                                headers=SHEETY_HEADERS)
+        print(f"Updating city IATA code: {response.text}")

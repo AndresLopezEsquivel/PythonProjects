@@ -1,33 +1,19 @@
+from data_manager import DataManager
+from flight_search import FlightSearch
 from pprint import pprint
 import os
 import requests
 
-SHEETY_ENDPOINT = os.environ.get("SHEETY_ENDPOINT")
-SHEETY_TOKEN = os.environ.get("SHEETY_TOKEN")
-
-sheety_headers = {
-    "Authorization": SHEETY_TOKEN
-}
-
-sheet_data = requests.get(url=SHEETY_ENDPOINT,
-                          headers=sheety_headers).json()["prices"]
+sheet_manager = DataManager()
+flight_search_manager = FlightSearch()
+sheet_data = sheet_manager.get_destination_data()
 
 for city in sheet_data:
     if not city["iataCode"]:
-        city["iataCode"] = "TESTING"
+        city["iataCode"] = flight_search_manager.get_destination_code(city["city"])
+        city_id = city["id"]
+        city_iata_code = city["iataCode"]
+        sheet_manager.update_city_iata_code(city_id=city_id,
+                                            iata_code=city_iata_code)
 
-for city in sheet_data:
-
-    sheety_request_body = {
-        "price": {
-            "iataCode": city["iataCode"]
-        }
-    }
-
-    put_request_endpoint = f"{SHEETY_ENDPOINT}/{city['id']}"
-
-    sheety_response = requests.put(url=put_request_endpoint,
-                                   json=sheety_request_body,
-                                   headers=sheety_headers)
-
-    print(sheety_response.text)
+sheet_manager.set_destination_data(destination_data=sheet_data)
