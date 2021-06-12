@@ -1,9 +1,7 @@
 from data_manager import DataManager
 from datetime import datetime, timedelta
 from flight_search import FlightSearch
-from pprint import pprint
-import os
-import requests
+from notification_manager import NotificationManager
 
 ORIGIN_IATA_CODE = "LON"
 MIN_NIGHTS_IN_DST = 7
@@ -11,6 +9,7 @@ MAX_NIGHTS_IN_DST = 28
 
 sheet_manager = DataManager()
 flight_search_manager = FlightSearch()
+notification_manager = NotificationManager()
 sheet_data = sheet_manager.get_destination_data()
 
 print(sheet_data)
@@ -36,5 +35,10 @@ for city in sheet_data:
                                                           min_nights_in_dst=min_nights_in_dst,
                                                           max_nights_in_dst=max_nights_in_dst)
     print(f"{flight_data.destination_city}: £{flight_data.price}")
+    message_to_send = f"Only £{flight_data.price} to fly from " \
+                     f"{flight_data.origin_city}-{flight_data.origin_airport}" \
+                     f" to {flight_data.destination_city}-{flight_data.destination_airport}," \
+                     f"from {flight_data.out_date} to {flight_data.return_date}"
+    notification_manager.send_message(message=message_to_send)
 
 sheet_manager.set_destination_data(destination_data=sheet_data)
