@@ -44,7 +44,13 @@ class FlightSearch:
         response = get_data(endpoint=endpoint,
                             body=body_request,
                             headers=headers)
-        data = response["data"][0]
+        try:
+            data = response["data"][0]
+        except IndexError as IndexErrorMessage:
+            print(f"Flights no found for: {destination_city_code}")
+            print(f"Error message: {IndexErrorMessage}")
+            return None
+
         flight_data = FlightData(
             price=data["price"],
             origin_city=data["route"][0]["cityFrom"],
